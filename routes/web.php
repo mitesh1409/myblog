@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,16 @@ Route::get('/', function () {
     return view('posts');
 });
 
-Route::get('/post/{slug}', function () {
-    return view('post');
+Route::get('/post/{slug}', function ($slug) {
+    $filePath = resource_path("posts/$slug.html");
+
+    if (!file_exists($filePath)) {
+        abort(Response::HTTP_NOT_FOUND);
+    }
+
+    $post = file_get_contents($filePath);
+
+    return view('post', [
+        'post' => $post
+    ]);
 });
