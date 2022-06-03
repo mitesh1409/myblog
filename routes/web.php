@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +26,7 @@ Route::get('/post/{slug}', function ($slug) {
         abort(Response::HTTP_NOT_FOUND);
     }
 
-    $post = file_get_contents($filePath);
+    $post = Cache::rememberForever("post.$slug", fn() => file_get_contents($filePath));
 
     return view('post', [
         'post' => $post
