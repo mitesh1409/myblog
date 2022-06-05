@@ -31,7 +31,7 @@ class Post
 
     public static function all()
     {
-        return collect(File::allFiles(resource_path('posts')))
+        return collect(File::files(resource_path('posts')))
                 ->map(fn($postFile) => File::get($postFile->getPathname()));
     }
 }
