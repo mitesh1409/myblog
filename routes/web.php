@@ -1,7 +1,6 @@
 <?php
 
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,13 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/post/{slug}', function ($slug) {
-    $filePath = resource_path("posts/$slug.html");
-
-    if (!file_exists($filePath)) {
-        abort(Response::HTTP_NOT_FOUND);
-    }
-
-    $post = Cache::rememberForever("post.$slug", fn() => file_get_contents($filePath));
+    $post = Post::find($slug);
 
     return view('post', [
         'post' => $post
