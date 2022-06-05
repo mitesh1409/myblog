@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('posts', ['posts' => Post::findAll()]);
+    return view('posts', ['posts' => Post::all()]);
 });
 
 Route::get('/post/{slug}', function ($slug) {
