@@ -32,4 +32,10 @@ class Post extends Model
 
         return Cache::rememberForever("post.$slug", fn() => $fileContents);
     }
+
+    public static function findAll()
+    {
+        return collect(File::allFiles(resource_path('posts')))
+                ->map(fn($postFile) => File::get($postFile->getPathname()));
+    }
 }
