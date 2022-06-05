@@ -29,6 +29,11 @@ class Post
         return Cache::rememberForever("post.$slug", fn() => $fileContents);
     }
 
+    /**
+     * Get all the files from the resources/posts directory.
+     *
+     * @return Illuminate\Support\Collection
+     */
     public static function all()
     {
         return collect(File::files(resource_path('posts')))
