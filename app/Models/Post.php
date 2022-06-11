@@ -30,12 +30,20 @@ class Post
     public static function find(string $slug)
     {
         try {
-            $fileContents = File::get(resource_path("posts/$slug.html"));
+            $document = YamlFrontMatter::parseFile(resource_path("posts/$slug.html"));
+
+            $post = new Post(
+                $document->title,
+                $document->slug,
+                $document->excerpt,
+                $document->published_at,
+                $document->body()
+            );
         } catch (FileNotFoundException $ex) {
             throw new ModelNotFoundException('Post not found', Response::HTTP_NOT_FOUND);
         }
 
-        return Cache::rememberForever("post.$slug", fn() => $fileContents);
+        return Cache::rememberForever("post.$slug", fn() => $post);
     }
 
     /**
