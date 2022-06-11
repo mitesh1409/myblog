@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class Post
 {
@@ -37,6 +38,6 @@ class Post
     public static function all()
     {
         return collect(File::files(resource_path('posts')))
-                ->map(fn($postFile) => File::get($postFile->getPathname()));
+                ->map(fn($postFile) => YamlFrontMatter::parseFile($postFile->getPathname()));
     }
 }
