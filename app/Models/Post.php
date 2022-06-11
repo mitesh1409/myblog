@@ -45,7 +45,7 @@ class Post
      */
     public static function all()
     {
-        return collect(File::files(resource_path('posts')))
+        $allPosts = collect(File::files(resource_path('posts')))
             // map to documents
             ->map(fn($postFile) => YamlFrontMatter::parseFile($postFile->getPathname()))
             // map to Post objects
@@ -57,5 +57,7 @@ class Post
                     $document->body()
                 )
             );
+
+        return Cache::rememberForever('posts.all', fn() => $allPosts);
     }
 }
