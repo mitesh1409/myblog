@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
@@ -42,7 +43,7 @@ class Post
                 $document->title,
                 $document->slug,
                 $document->excerpt,
-                $document->published_at,
+                Carbon::parse($document->published_at)->format('Y-m-d'),
                 $document->body()
             );
         } catch (FileNotFoundException $ex) {
@@ -67,10 +68,11 @@ class Post
                     $document->title,
                     $document->slug,
                     $document->excerpt,
-                    $document->published_at,
+                    Carbon::parse($document->published_at)->format('Y-m-d'),
                     $document->body()
                 )
-            );
+            )
+            ->sortByDesc('published_at');
 
         return Cache::rememberForever('posts.all', fn() => $allPosts);
     }
