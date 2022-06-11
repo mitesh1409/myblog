@@ -30,7 +30,13 @@ class Post
     public static function find(string $slug)
     {
         try {
-            $document = YamlFrontMatter::parseFile(resource_path("posts/$slug.html"));
+            $filePath = resource_path("posts/$slug.html");
+
+            if (! File::exists($filePath)) {
+                throw new FileNotFoundException();
+            }
+
+            $document = YamlFrontMatter::parseFile($filePath);
 
             $post = new Post(
                 $document->title,
