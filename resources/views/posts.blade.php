@@ -18,7 +18,7 @@
             </h1>
 
             <p>
-                <?= $post->body() ?>
+                <?= $post->excerpt ?>
             </p>
         </article>
     <?php

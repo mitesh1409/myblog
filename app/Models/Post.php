@@ -11,6 +11,14 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class Post
 {
+    public function __construct(
+        public $title,
+        public $slug,
+        public $excerpt,
+        public $published_at,
+        public $body
+    ) {}
+
     /**
      * Get the post by its slug.
      *
@@ -38,6 +46,16 @@ class Post
     public static function all()
     {
         return collect(File::files(resource_path('posts')))
-                ->map(fn($postFile) => YamlFrontMatter::parseFile($postFile->getPathname()));
+            // map to documents
+            ->map(fn($postFile) => YamlFrontMatter::parseFile($postFile->getPathname()))
+            // map to Post objects
+            ->map(fn($document) => new Post(
+                    $document->title,
+                    $document->slug,
+                    $document->excerpt,
+                    $document->published_at,
+                    $document->body()
+                )
+            );
     }
 }
