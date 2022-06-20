@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     DB::listen(function($query) {
-        Log::debug($query->sql);
+        Log::debug($query->sql, $query->bindings);
     });
 
     return view('posts', ['posts' => Post::all()]);
