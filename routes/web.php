@@ -20,16 +20,19 @@ Route::get('/', function () {
 });
 
 Route::get('/posts/{slug}', function ($slug) {
-    $filePath = __DIR__ . "/../resources/posts/$slug.html";
+    $post = Cache::get("posts.$slug");
 
-    if (! file_exists($filePath)) {
-        abort(Response::HTTP_NOT_FOUND);
+    if (! $post) {
+        $filePath = __DIR__ . "/../resources/posts/$slug.html";
+
+        if (! file_exists($filePath)) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $post = file_get_contents($filePath);
+
+        Cache::put("posts.$slug", $post);
     }
-
-    $post = Cache::rememberForever(
-        "posts.$slug",
-        fn() => file_get_contents($filePath)
-    );
 
     return view('post', [
         'post' => $post
